@@ -1,0 +1,33 @@
+<h3>Cadastro de Consultores</h3>
+
+<div class="row">
+  <form class="needs-validation" novalidate>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Nome</label>
+        <input type="text" class="form-control" name="name" [(ngModel)]="consultant.name" />
+      </div>
+      <div class="col-md-6">
+        <label>E-mail</label>
+        <input type="text" class="form-control" name="email" [(ngModel)]="consultant.email" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <label>Projetos</label>
+        <textarea id="projects" class="form-control" name="projects" [(ngModel)]="projectsList"></textarea>
+      </div>
+    </div>
+    <div class="row" *ngIf="consultant._id">
+      <div class="col-md-12">
+        <label>Ativo</label>
+        <input type="checkbox" name="isActive" [(ngModel)]="consultant.isActive" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <input type="button" class="btn btn-success" (click)="createOrUpdate()" value="Salvar"/>
+      </div>
+    </div>
+  </form>
+</div>

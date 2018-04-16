@@ -1,0 +1,26 @@
+<h3>Consultores Cadastrados</h3>
+<div class="col-md-12">
+  <button class="btn btn-success" [routerLink]="['create-edit']">Cadastrar Novo Consultor</button>
+</div>
+<div class="col-md-12">
+  <table class="table">
+    <tr>
+      <td>Nome</td>
+      <td>E-mail</td>
+      <td>Ativo</td>
+      <td>Data de Cadastro</td>
+      <td>Ações</td>
+    </tr>
+    <tr *ngFor="let c of consultants">
+      <td>{{c.name}}</td>
+      <td>{{c.email}}</td>
+      <td>{{transcript(c.isActive)}}</td>
+      <td>{{c.createDate | date:'dd/MM/yyyy'}}</td>
+      <td>
+        <button class="btn btn-info" [routerLink]="['create-edit', c._id]">
+          Editar
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>
