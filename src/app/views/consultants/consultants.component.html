@@ -1,6 +1,27 @@
 <h3>Consultores Cadastrados</h3>
+<div class="col-md-6">
+  <div class="form-group">
+    <label>Nome</label>
+    <input type="text" placeholder="Digite o nome do consultar" class="form-control" name="name" [(ngModel)]="searchConsultant.name" />
+  </div>
+</div>
+<div class="col-md-6">
+  <div class="form-group">
+    <label>E-mail</label>
+    <input type="text" placeholder="Digite o e-mail do consultar" class="form-control" name="email" [(ngModel)]="searchConsultant.email" />
+  </div>
+</div>
 <div class="col-md-12">
+  <button class="btn btn-info" (click)="getAllConsultants(1)">Pesquisar</button>
   <button class="btn btn-success" [routerLink]="['create-edit']">Cadastrar Novo Consultor</button>
+</div>
+<div class="col-md-12">
+  <label class="label-control">Mostrar
+    <select (change)="getAllConsultants(1)" class="form-control" [(ngModel)]="searchConsultant.limit">
+      <option *ngFor="let i of itemsPerPage" [ngValue]="i">{{i}}</option>
+    </select>
+    usuários
+  </label>
 </div>
 <div class="col-md-12">
   <table class="table">
@@ -11,7 +32,7 @@
       <td>Data de Cadastro</td>
       <td>Ações</td>
     </tr>
-    <tr *ngFor="let c of consultants">
+    <tr *ngFor="let c of consultants | paginate: { itemsPerPage: searchConsultant.limit, currentPage: searchConsultant.currentPage, totalItems: searchConsultant.totalItems}">
       <td>{{c.name}}</td>
       <td>{{c.email}}</td>
       <td>{{transcript(c.isActive)}}</td>
@@ -23,4 +44,6 @@
       </td>
     </tr>
   </table>
+  <pagination-controls (pageChange)="getAllConsultants($event)" class="pagination" autoHide="false" previousLabel="Anterior"
+    nextLabel="Próxima" maxSize="5"></pagination-controls>
 </div>

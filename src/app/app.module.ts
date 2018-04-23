@@ -12,6 +12,7 @@ import { ROUTES } from './app.routing';
 import { RouterModule } from '@angular/router';
 import { ConsultantService } from 'app/services/consultant.service';
 import { HttpModule } from '@angular/http';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -28,7 +29,8 @@ import { HttpModule } from '@angular/http';
     RouterModule.forRoot(ROUTES, { useHash: true }),
     HttpModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    NgxPaginationModule
   ],
   providers: [
     ConsultantService,

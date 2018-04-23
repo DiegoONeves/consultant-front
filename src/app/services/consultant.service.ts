@@ -9,6 +9,7 @@ import 'rxjs/add/observable/throw';
 import { Consultant } from '../models/consultant';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
+import { SearchConsultant } from 'app/models/searchConsultant';
 
 @Injectable()
 export class ConsultantService {
@@ -22,18 +23,43 @@ export class ConsultantService {
     return options;
   }
 
-  async get(): Promise<Consultant[]> {
+
+  async get(searchConsultant: SearchConsultant): Promise<Consultant[]> {
+
+    let queryString = "?";
+
+    if (searchConsultant.name) {
+      queryString += `filter=name=${searchConsultant.name}`;
+    }
+    if (searchConsultant.email) {
+      if (queryString !== "?") {
+        queryString += `,email=${searchConsultant.email}`;
+      } else
+        queryString += `filter=email=${searchConsultant.email}`;
+    }
+
+    let limiters = `limiters=limit=${searchConsultant.limit},skip=${(searchConsultant.currentPage - 1) * searchConsultant.limit}`;
+    queryString += `${(queryString !== "?" ? "&" : "")}${limiters}`;
 
     const headers = this.getHeaders();
     let consultants = new Array<Consultant>();
-    let res = await this.http.get(`${environment.baseUrl}/consultants`, headers)
+
+    let url = `${environment.baseUrl}/consultants${queryString}`;
+
+    console.log(url);
+
+    let res = await this.http.get(url, headers)
       .map(response => response.json())
       .catch((error: any) => {
         return Observable.throw(error);
       })
       .toPromise();
 
-    for (let r of res) {
+    console.log(res);
+
+    searchConsultant.totalItems = res.totalItems;
+
+    for (let r of res.data) {
       let consultant = new Consultant();
       consultant.load(r);
       consultants.push(consultant);
@@ -69,8 +95,8 @@ export class ConsultantService {
 
   async edit(consultant: Consultant) {
     const headers = this.getHeaders();
-
-    await this.http.put(`${environment.baseUrl}/consultants`, JSON.stringify(consultant), headers)
+    let url = `${environment.baseUrl}/consultants/${consultant._id}`;
+    await this.http.put(url, JSON.stringify(consultant), headers)
       .map((res: Response) => res.json())
       .toPromise()
       .catch((error: any) => error || 'Server error');
